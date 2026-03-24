@@ -17,6 +17,17 @@ Alacritty's standard `linux.toml` theme targets legacy VGA text mode. On modern 
 - Bright colors tuned for modern DRM drivers
 - Designed for `draw_bold_text_with_bright_colors = true`
 
+## Installation
+
+1. Download the `linux-vconsole.toml` file to your Alacritty configuration directory (usually `~/.config/alacritty/` on Linux/macOS or `%APPDATA%\alacritty\` on Windows).
+2. Open your main `alacritty.toml` file and add the import statement:
+
+```toml
+import = [
+    "~/.config/alacritty/linux-vconsole.toml"
+]
+```
+
 ## Recommended Alacritty Configuration
 
 To achieve the intended look, ensure your `alacritty.toml` includes:
