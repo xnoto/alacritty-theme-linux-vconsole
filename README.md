@@ -6,9 +6,9 @@ A color scheme for Alacritty that matches the modern Linux Virtual Console (TTY)
 
 Alacritty's standard `linux.toml` theme targets legacy VGA text mode. On modern systems using DRM/KMS framebuffers (`fbcon`), the kernel renders the 16-color palette differently:
 
-1.  **True Black Background:** Unlike many "dark" themes (including Alabaster Dark) which use slightly grey backgrounds, the native console is pure `#000000`.
-2.  **Desaturated High-Intensity Colors:** Modern framebuffer drivers render "Bold" text using a high-intensity palette that appears lighter and more desaturated (similar to the Alabaster palette) than the primary VGA colors.
-3.  **Bold as Color:** In the native console, bold text is often distinguished solely by its brighter color rather than an increased font weight.
+1. **True Black Background:** Unlike many "dark" themes (including Alabaster Dark) which use slightly grey backgrounds, the native console is pure `#000000`.
+2. **Desaturated High-Intensity Colors:** Modern framebuffer drivers render "Bold" text using a high-intensity palette that appears lighter and more desaturated (similar to the Alabaster palette) than the primary VGA colors.
+3. **Bold as Color:** In the native console, bold text is often distinguished solely by its brighter color rather than an increased font weight.
 
 ## Features
 

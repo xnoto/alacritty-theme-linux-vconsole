@@ -1,0 +1,2 @@
+MD013: false # Disable line length limits for markdown files (since README contains long URLs)
+MD033: false # Allow inline HTML if needed
