@@ -6,9 +6,9 @@ A color scheme for Alacritty that matches the modern Linux Virtual Console (TTY)
 
 Alacritty's standard `linux.toml` theme targets legacy VGA text mode. On modern systems using DRM/KMS framebuffers (`fbcon`), the kernel renders the 16-color palette differently:
 
-1.  **True Black Background:** Unlike many "dark" themes (including Alabaster Dark) which use slightly grey backgrounds, the native console is pure `#000000`.
-2.  **Desaturated High-Intensity Colors:** Modern framebuffer drivers render "Bold" text using a high-intensity palette that appears lighter and more desaturated (similar to the Alabaster palette) than the primary VGA colors.
-3.  **Bold as Color:** In the native console, bold text is often distinguished solely by its brighter color rather than an increased font weight.
+1. **True Black Background:** Unlike many "dark" themes (including Alabaster Dark) which use slightly grey backgrounds, the native console is pure `#000000`.
+2. **Desaturated High-Intensity Colors:** Modern framebuffer drivers render "Bold" text using a high-intensity palette that appears lighter and more desaturated (similar to the Alabaster palette) than the primary VGA colors.
+3. **Bold as Color:** In the native console, bold text is often distinguished solely by its brighter color rather than an increased font weight.
 
 ## Features
 
@@ -16,6 +16,17 @@ Alacritty's standard `linux.toml` theme targets legacy VGA text mode. On modern 
 - Normal colors kept dark for background use
 - Bright colors tuned for modern DRM drivers
 - Designed for `draw_bold_text_with_bright_colors = true`
+
+## Installation
+
+1. Download the `linux-vconsole.toml` file to your Alacritty configuration directory (usually `~/.config/alacritty/` on Linux/macOS or `%APPDATA%\alacritty\` on Windows).
+2. Open your main `alacritty.toml` file and add the import statement:
+
+```toml
+import = [
+    "~/.config/alacritty/linux-vconsole.toml"
+]
+```
 
 ## Recommended Alacritty Configuration
 
