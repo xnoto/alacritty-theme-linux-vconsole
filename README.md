@@ -44,3 +44,9 @@ style = "Regular"
 ## Font Attribution
 
 The recommended font **Px437 IBM VGA 8x16** is from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/) by VileR, licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+## Development
+
+Run `pre-commit run --all-files` before submitting changes. When refreshing
+hooks, freeze any mutable release channel such as Typos' `v1` tag to its commit
+SHA; pre-commit does not support moving references reliably.

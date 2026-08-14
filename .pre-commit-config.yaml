@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -8,11 +8,11 @@ repos:
       - id: check-toml
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.13.0
+    rev: v0.23.2
     hooks:
       - id: markdownlint-cli2
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.18.2
+    rev: 12ffd4a04b4893ab75db66a59aaad2d996c3e982  # v1
     hooks:
       - id: typos
