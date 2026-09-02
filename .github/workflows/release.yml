@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  checks: read
+  contents: write
+
+jobs:
+  publish:
+    name: publish GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.x'
+      - name: Verify tag targets current main
+        id: target
+        run: |
+          git fetch origin main --depth=1
+          tag_commit="$(git rev-list -n 1 "$GITHUB_REF_NAME")"
+          test "$tag_commit" = "$(git rev-parse origin/main)"
+          printf 'commit=%s\n' "$tag_commit" >> "$GITHUB_OUTPUT"
+      - name: Verify required CI checks succeeded
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT_SHA: ${{ steps.target.outputs.commit }}
+        run: |
+          successful_checks="$(gh api "repos/$GITHUB_REPOSITORY/commits/$COMMIT_SHA/check-runs" --jq '[.check_runs[] | select(.name == "pre-commit" or .name == "release readiness") | select(.status == "completed" and .conclusion == "success") | .name] | sort | join(",")')"
+          test "$successful_checks" = 'pre-commit,release readiness'
+      - name: Extract release notes from changelog
+        run: >-
+          python scripts/check_changelog.py
+          --release-version "$GITHUB_REF_NAME"
+          --output "$RUNNER_TEMP/release-notes.md"
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "$GITHUB_REF_NAME"
+          --verify-tag
+          --title "$GITHUB_REF_NAME"
+          --notes-file "$RUNNER_TEMP/release-notes.md"
