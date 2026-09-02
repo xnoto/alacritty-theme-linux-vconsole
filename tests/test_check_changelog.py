@@ -93,6 +93,8 @@ class CheckChangelogTests(unittest.TestCase):
             (workdir / "linux-vconsole.toml").write_text(
                 "[colors]\nvalue = 'changed'\n", encoding="utf-8"
             )
+            self.run_git(workdir, "add", ".")
+            self.run_git(workdir, "commit", "-m", "change palette")
 
             result = subprocess.run(
                 [sys.executable, str(SCRIPT), "--base", base],
@@ -125,6 +127,8 @@ class CheckChangelogTests(unittest.TestCase):
                 "# Changelog\n\n## [Unreleased]\n\n### Added\n\n- Initial entry.\n- Changed palette.\n",
                 encoding="utf-8",
             )
+            self.run_git(workdir, "add", ".")
+            self.run_git(workdir, "commit", "-m", "change palette")
 
             result = subprocess.run(
                 [sys.executable, str(SCRIPT), "--base", base],
