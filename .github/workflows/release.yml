@@ -6,6 +6,7 @@ on:
       - 'v*'
 
 permissions:
+  checks: read
   contents: write
 
 jobs:
@@ -19,10 +20,20 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: '3.x'
-      - name: Verify tag targets main
+      - name: Verify tag targets current main
+        id: target
         run: |
           git fetch origin main --depth=1
-          git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+          tag_commit="$(git rev-list -n 1 "$GITHUB_REF_NAME")"
+          test "$tag_commit" = "$(git rev-parse origin/main)"
+          printf 'commit=%s\n' "$tag_commit" >> "$GITHUB_OUTPUT"
+      - name: Verify required CI checks succeeded
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT_SHA: ${{ steps.target.outputs.commit }}
+        run: |
+          successful_checks="$(gh api "repos/$GITHUB_REPOSITORY/commits/$COMMIT_SHA/check-runs" --jq '[.check_runs[] | select(.name == "pre-commit" or .name == "release readiness") | select(.status == "completed" and .conclusion == "success") | .name] | sort | join(",")')"
+          test "$successful_checks" = 'pre-commit,release readiness'
       - name: Extract release notes from changelog
         run: >-
           python scripts/check_changelog.py

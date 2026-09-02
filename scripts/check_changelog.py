@@ -20,6 +20,19 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
+def unreleased_section(lines: list[str]) -> list[str]:
+    try:
+        start = lines.index(UNRELEASED_HEADER)
+    except ValueError:
+        fail("CHANGELOG.md must contain '## [Unreleased]'")
+
+    end = next(
+        (index for index in range(start + 1, len(lines)) if lines[index].startswith("## [")),
+        len(lines),
+    )
+    return lines[start + 1 : end]
+
+
 def read_changelog() -> list[str]:
     if not CHANGELOG.is_file():
         fail("CHANGELOG.md is required")
@@ -60,15 +73,34 @@ def changed_paths(base: str) -> set[str]:
     return set(filter(None, result.stdout.splitlines()))
 
 
-def check_changelog_updated(base: str) -> None:
+def previous_unreleased_section(base: str) -> list[str]:
+    result = subprocess.run(
+        ["git", "show", f"{base}:CHANGELOG.md"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return []
+    previous = result.stdout.splitlines()
+    if UNRELEASED_HEADER not in previous:
+        return []
+    return unreleased_section(previous)
+
+
+def check_changelog_updated(base: str, lines: list[str]) -> None:
     paths = changed_paths(base)
     affects_release = any(
         path == relevant or path.startswith(relevant)
         for path in paths
         for relevant in RELEASE_RELEVANT_PATHS
     )
-    if affects_release and "CHANGELOG.md" not in paths:
+    if not affects_release:
+        return
+    if "CHANGELOG.md" not in paths:
         fail("release-relevant changes must update CHANGELOG.md")
+    if unreleased_section(lines) == previous_unreleased_section(base):
+        fail("release-relevant changes must update CHANGELOG.md under Unreleased")
 
 
 def notes_for_version(lines: list[str], tag: str) -> str:
@@ -100,7 +132,7 @@ def main() -> None:
 
     lines = read_changelog()
     if args.base:
-        check_changelog_updated(args.base)
+        check_changelog_updated(args.base, lines)
 
     if args.release_version:
         if args.output is None:
