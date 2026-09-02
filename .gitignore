@@ -12,6 +12,3 @@ Thumbs.db
 .idea/
 *.swp
 *~
-
-# Local AI workspace config
-AGENTS.md
