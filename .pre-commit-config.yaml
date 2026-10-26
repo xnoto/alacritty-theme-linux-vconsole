@@ -8,11 +8,11 @@ repos:
       - id: check-toml
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.23.2
+    rev: v0.24.0
     hooks:
       - id: markdownlint-cli2
 
   - repo: https://github.com/crate-ci/typos
-    rev: 12ffd4a04b4893ab75db66a59aaad2d996c3e982  # v1
+    rev: 9023c1f779400877cafdd98052113fc777e2cfdc  # frozen: v1.51.1
     hooks:
       - id: typos
